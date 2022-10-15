@@ -22,10 +22,6 @@ services:
       - '--web.console.templates=/usr/share/prometheus/consoles'
     ports:
       - 9090:9090
-    links:
-      - cadvisor:cadvisor
-      - alertmanager:alertmanager
-#      - pushgateway:pushgateway
     depends_on:
       - cadvisor
 #      - pushgateway
@@ -37,8 +33,22 @@ services:
 #        constraints:
 #          - node.hostname == ${HOSTNAME}
 
+  snmp-exporter:
+    image: quay.io/prometheus/snmp-exporter:v0.20.0
+    command: 
+      - '--config.file=/etc/prometheus/snmp/snmp.yml'
+    ports:
+      - 9116:9116
+    volumes:
+      - ./snmp/:/etc/prometheus/snmp/
+    networks:
+      - back-tier
+    restart: always
+    deploy:
+      mode: global
+
   node-exporter:
-    image: quay.io/prometheus/node-exporter:latest
+    image: quay.io/prometheus/node-exporter:v1.4.0
     volumes:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
