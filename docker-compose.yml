@@ -52,8 +52,8 @@ services:
     volumes:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
-      - /:/rootfs:ro
-      - /:/host:ro,rslave
+      # - /:/rootfs:ro
+      # - /:/host:ro,rslave
     command: 
       - '--path.rootfs=/host'
       - '--path.procfs=/host/proc' 
